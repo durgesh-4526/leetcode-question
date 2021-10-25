@@ -1,0 +1,17 @@
+class Solution {
+public:
+    bool threeConsecutiveOdds(vector<int>& arr) {
+        int key = 0;
+        for(auto ans : arr)
+        {
+            if(ans %2 != 0)
+            {
+                key++;
+            }else{
+                key = 0;
+            }
+            if(key == 3)return true;
+        }
+        return false;
+    }
+};

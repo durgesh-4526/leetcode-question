@@ -1,0 +1,108 @@
+// { Driver Code Starts
+#include <bits/stdc++.h>
+using namespace std;
+
+
+ // } Driver Code Ends
+class Solution
+{
+    public:
+    //Function to find largest rectangular area possible in a given histogram.
+    vector<long long> lefti(long long arr[], int n)
+    {
+        vector<long long> leftl;
+        stack<pair<long long,int>> s;
+        for (int i = 0; i < n; i++)
+        {
+            if (s.size() == 0)
+                leftl.push_back(-1);
+            if (s.size() > 0 && s.top().first < arr[i])
+                leftl.push_back(s.top().second);
+            if (s.size() > 0 && s.top().first >= arr[i])
+            {
+                while (s.size() > 0 && s.top().first >= arr[i])
+                {
+                    s.pop();
+                }
+                if(s.size() == 0)leftl.push_back(-1);
+                else{
+                    leftl.push_back(s.top().second);
+                }
+            }
+            s.push({arr[i],i});
+        }
+        return leftl;
+    }
+    vector<long long> righti(long long arr[], int n)
+    {
+        vector<long long> rightr;
+        stack<pair<long long,int>> s;
+        for (int i = n-1; i >= 0; i--)
+        {
+            if (s.size() == 0)
+                rightr.push_back(n);
+            if (s.size() > 0 && s.top().first < arr[i])
+                rightr.push_back(s.top().second);
+            if (s.size() > 0 && s.top().first >= arr[i])
+            {
+                while (s.size() > 0 && s.top().first >= arr[i])
+                {
+                    s.pop();
+                }
+                if(s.size() == 0)rightr.push_back(n);
+                else{
+                    rightr.push_back(s.top().second);
+                }
+            }
+            s.push({arr[i],i});
+        }return rightr;
+    }
+    long long getMaxArea(long long arr[], int n)
+    {
+        // Your code here
+        vector<long long> left = lefti(arr,n);
+        // lefti(arr, n);
+        // cout<<"the left is ";
+        // for (int i = 0; i < left.size(); i++)
+        // {
+        //     cout<<left[i]<<" ";
+        // }
+
+        vector<long long> right = righti(arr,n);
+        // righti(arr, n);
+        reverse(right.begin(),right.end());
+        vector<long long> ans = left;
+        long long temp = 0;
+        long long maxi = INT_MIN;
+        for (int i = 0; i < ans.size(); i++)
+        { 
+            ans[i]  = right[i] - left[i] - 1;
+            maxi = max(maxi, ans[i]*arr[i]);
+        }
+        return maxi;
+    }
+};
+
+
+// { Driver Code Starts.
+
+int main()
+ {
+    long long t;
+
+    cin>>t;
+    while(t--)
+    {
+        int n;
+        cin>>n;
+        
+        long long arr[n];
+        for(int i=0;i<n;i++)
+            cin>>arr[i];
+        Solution ob;
+        cout<<ob.getMaxArea(arr, n)<<endl;
+    
+    }
+	return 0;
+}
+  // } Driver Code Ends
